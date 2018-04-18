@@ -123,7 +123,6 @@ function loadGlobalItem(params) {
       syncInBackground = params.syncInBackground,
       syncParams = params.syncParams;
 
-  var now = new Date().getTime();
   var writebleRet = ret;
 
   if (writebleRet === null || writebleRet === undefined) {
@@ -142,17 +141,14 @@ function loadGlobalItem(params) {
     }
   }
 
-  if (writebleRet.expires < now) {
-    if (autoSync && this.sync[key]) {
-      if (syncInBackground) {
-        this.sync[key]({ syncParams: syncParams });
-        return _promise2.default.resolve(writebleRet.data);
-      }
-      return new _promise2.default(function (resolve, reject) {
-        return _this2.sync[key]({ resolve: resolve, reject: reject, syncParams: syncParams });
-      });
+  if (autoSync && this.sync[key]) {
+    if (syncInBackground) {
+      this.sync[key]({ syncParams: syncParams });
+      return _promise2.default.resolve(writebleRet.data);
     }
-    return _promise2.default.reject(new _error.ExpiredError((0, _stringify2.default)(params)));
+    return new _promise2.default(function (resolve, reject) {
+      return _this2.sync[key]({ resolve: resolve, reject: reject, syncParams: syncParams });
+    });
   }
   return _promise2.default.resolve(writebleRet.data);
 }
@@ -187,7 +183,6 @@ function loadMapItem(params) {
       syncInBackground = params.syncInBackground,
       syncParams = params.syncParams;
 
-  var now = new Date().getTime();
   if (ret === null || ret === undefined) {
     return this.noItemFound(params);
   }
@@ -199,22 +194,20 @@ function loadMapItem(params) {
     }
   }
 
-  if (ret.expires < now) {
-    if (autoSync && this.sync[key]) {
-      if (syncInBackground) {
-        this.sync[key]({ id: id, syncParams: syncParams });
-        return _promise2.default.resolve(ret.data);
-      }
-      return new _promise2.default(function (resolve, reject) {
-        return _this4.sync[key]({ id: id, resolve: resolve, reject: reject, syncParams: syncParams });
-      });
+  if (autoSync && this.sync[key]) {
+    if (syncInBackground) {
+      this.sync[key]({ id: id, syncParams: syncParams });
+      return _promise2.default.resolve(ret.data);
     }
-
-    if (batched) {
-      return _promise2.default.resolve({ syncId: id });
-    }
-    return _promise2.default.reject(new _error.ExpiredError((0, _stringify2.default)(params)));
+    return new _promise2.default(function (resolve, reject) {
+      return _this4.sync[key]({ id: id, resolve: resolve, reject: reject, syncParams: syncParams });
+    });
   }
+
+  if (batched) {
+    return _promise2.default.resolve({ syncId: id });
+  }
+
   return _promise2.default.resolve(ret.data);
 }
 

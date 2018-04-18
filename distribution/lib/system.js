@@ -51,12 +51,9 @@ function save(params) {
 
   var key = params.key,
       id = params.id,
-      data = params.data,
-      _params$expires = params.expires,
-      expires = _params$expires === undefined ? this.defaultExpires : _params$expires;
+      data = params.data;
 
-  var now = new Date().getTime();
-  var dataToSave = { data: data, expires: now + expires };
+  var dataToSave = { data: data };
   var infoToReturn = void 0;
 
   if (key.toString().indexOf('_') !== -1) {
